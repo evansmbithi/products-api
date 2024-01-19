@@ -1,10 +1,25 @@
 # from products import get_products
+from unittest import TestCase
 import requests
-import json
 
-def base_url(param):
-	return 'http://localhost:5000' + param
+class Test_products(TestCase):
+	def base_url(self,param):
+		return 'http://localhost:5000' + param
 
-response = requests.get(base_url('/products'))
-print(len(response.json()))
-print(response.status_code)
+	def get_products(self):
+		"""Test http://localhost:5000/products"""
+		response = requests.get(self.base_url('/products'))
+		# print(len(response.json()))
+		self.assertEqual(response.status_code, 200)
+
+	def get_product(self):
+		"""Test http://localhost:5000/products/144 - with method GET"""
+
+	def add_product(self):
+		"""Test http://localhost:5000/products - with method POST"""
+
+	def update_product(self):
+		"""Test http://localhost:5000/products/144 - with method PUT"""
+
+	def delete_product(self):
+		"""Test http://localhost:5000/products/144 - with method DELETE"""
