@@ -1,25 +1,34 @@
-# from products import get_products
+# from products import app
 from unittest import TestCase
 import requests
 
-class Test_products(TestCase):
+class TestProducts(TestCase):
+	# https://stackoverflow.com/questions/43957860/python-unittest-ran-0-tests-in-0-000s
+	# Pretty sure you need test somewhere in the method name. – 
+	# The TestCase methods to be run must start with 'test'! – 
+	# Yes! Strange, did not know about this restriction. Thank you kind sirs. 
+
 	def base_url(self,param):
 		return 'http://localhost:5000' + param
 
-	def get_products(self):
-		"""Test http://localhost:5000/products"""
+	def test_get_products(self):
+		"""Test GET all products http://localhost:5000/products"""
 		response = requests.get(self.base_url('/products'))
 		# print(len(response.json()))
 		self.assertEqual(response.status_code, 200)
 
-	def get_product(self):
-		"""Test http://localhost:5000/products/144 - with method GET"""
+	def test_get_product(self):
+		"""Test GET product 144 http://localhost:5000/products/144 - with method GET"""
+		raise Exception("not implemented")
 
-	def add_product(self):
-		"""Test http://localhost:5000/products - with method POST"""
+	def test_add_product(self):
+		"""Test ADD product http://localhost:5000/products - with method POST"""
+		raise Exception("not implemented")
 
-	def update_product(self):
-		"""Test http://localhost:5000/products/144 - with method PUT"""
+	def test_update_product(self):
+		"""Test UPDATE product 144 http://localhost:5000/products/144 - with method PUT"""
+		raise Exception("not implemented")
 
-	def delete_product(self):
-		"""Test http://localhost:5000/products/144 - with method DELETE"""
+	def test_delete_product(self):
+		"""Test DELETE product 144 http://localhost:5000/products/144 - with method DELETE"""
+		raise Exception("not implemented")
