@@ -3,3 +3,5 @@
 # https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 GET http://localhost:5000/products
+
+# UPDATE http://localhost:5000/products/146
