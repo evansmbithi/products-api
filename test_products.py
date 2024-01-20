@@ -1,7 +1,21 @@
 import requests
 from unittest import TestCase
-import unittest
+from dataclasses import asdict, dataclass
+import json
 
+@dataclass
+class New_data:
+	id: int
+	name: str
+	price: int
+
+	def __init__(self, id, name, price):
+		self.id = id
+		self.name = name
+		self.price = price
+	
+	def tojson(self):
+		return json.dumps(asdict(self))
 
 class TestProducts(TestCase):
 	# https://stackoverflow.com/questions/43957860/python-unittest-ran-0-tests-in-0-000s
@@ -9,8 +23,9 @@ class TestProducts(TestCase):
 	# The TestCase methods to be run must start with 'test'! – 
 	# Yes! Strange, did not know about this restriction. Thank you kind sirs. 
 
+	# new_product = New_data(146,'Black Market',3.99).tojson()
 	new_product = {'id':146, 'name': 'Black Market', 'price':3.99}
-	update_product = {
+	product_update = {
 		'price':2.50
 		}
 	header = {'Content-Type':'application/json'}
@@ -18,33 +33,63 @@ class TestProducts(TestCase):
 	def base_url(self,param):
 		return 'http://localhost:5000' + param
 
+	def get_products(self):
+		response = requests.get(self.base_url('/products'))
+		return response
+
+	def add_product(self, header=header, body=new_product):
+		response = requests.post(self.base_url('/products'), headers = header, json = body)
+		return response
+
+	def get_product(self,product_id=new_product['id']):
+		response = requests.get(self.base_url(f'/products/{product_id}'))
+		return response
+
+	def update_product(self,product_id=new_product['id'], body=product_update):
+		response = requests.put(self.base_url(f'/products/{product_id}'), json=body)
+		return response
+
+	def delete_product(self,product_id=new_product['id']):
+		response = requests.delete(self.base_url(f'/products/{product_id}'))
+		return response
+	
+########################### TESTS BEGIN HERE #############################################
+	
+	def setUp(self):
+		self.add_product()
+
+	def tearDown(self):
+		self.delete_product()
+	
 	def test_get_products(self):
 		"""Test GET all products http://localhost:5000/products"""
-		response = requests.get(self.base_url('/products'))
-		# self.assertEqual(len(response.json()), 2)
+		response = self.get_products()
+		self.assertEqual(len(response.json()), 2)
 		self.assertEqual(response.status_code, 200)
 
 	def test_add_product(self):
 		"""Test ADD product http://localhost:5000/products - with method POST"""
-		response = requests.post(self.base_url('/products'), headers = self.header, json=self.new_product)
+		response = self.add_product()
 		self.assertEqual(response.status_code, 201)
+		self.assertEqual(len(self.get_products().json()), 3)
+		self.delete_product()
 
-	def test_get_product(self,product=new_product['id']):
-		"""Test GET product 146 http://localhost:5000/products/144 - with method GET"""
-		response = requests.get(self.base_url(f'/products/{product}'))
+	def test_get_product(self):
+		"""Test GET product 146 http://localhost:5000/products/146 - with method GET"""
+		response = self.get_product()
 		self.assertEqual(response.status_code, 200)
-		self.assertDictEqual(self.new_product,response.json())	
+		self.assertDictEqual(self.new_product,response.json())
 
-	def test_update_product(self,product=new_product['id']):
+	def test_update_product(self):
 		"""Test UPDATE product 146 http://localhost:5000/products/146 - with method PUT"""
-		response = requests.put(self.base_url(f'/products/{product}'), json=self.update_product)
+		response = self.update_product()
 		self.assertEqual(response.status_code, 200)
 		# self.assertDictContainsSubset(response.json(),self.update_product)
 
-	def test_delete_product(self,product=new_product['id']):
+	def test_delete_product(self):
 		"""Test DELETE product 146 http://localhost:5000/products/146 - with method DELETE"""
 		# raise Exception("not implemented")
-		response = requests.delete(self.base_url(f'/products/{product}'))
+		response = self.delete_product()
 		self.assertEqual(response.status_code, 204)
 		# self.test_get_products()
 
