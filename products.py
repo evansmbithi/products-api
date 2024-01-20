@@ -8,8 +8,8 @@ def hello_world():
 	return "Hello World"
 
 products = [
-	{'id':143, 'name': 'Notebook', 'price':5.49},
-	{'id':144, 'name': 'Black Market', 'price':1.99}
+	# {'id':143, 'name': 'Notebook', 'price':5.49},
+	# {'id':144, 'name': 'Black Market', 'price':1.99}
 ]
 
 @app.route('/products', methods=['GET'])
