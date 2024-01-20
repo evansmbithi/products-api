@@ -23,7 +23,14 @@ def get_product(id):
 	product = [x for x in products if x["id"] == id][0]
 	return jsonify(product)
 
+@app.route('/products', methods=['POST'])
+def add_product():
+	products.append(request.get_json())
+	return '', 201
 
+@app.route('/products/<id>', methods=['PUT'])
+def update_product():
+	return '', 204
 
 app.run(port=5000,debug=True)
 

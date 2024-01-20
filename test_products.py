@@ -28,7 +28,8 @@ class TestProducts(TestCase):
 
 	def test_add_product(self):
 		"""Test ADD product http://localhost:5000/products - with method POST"""
-		response = requests.post(self.base_url('/products'), data=self.new_product)
+		response = requests.post(self.base_url('/products'), headers = {"dataType": "json",
+    "accept":"application/json", "Content-Type":"application/json"}, data=self.new_product)
 		self.assertEqual(response.status_code, 201)
 
 	def test_get_product(self,product=new_product['id']):
@@ -40,7 +41,7 @@ class TestProducts(TestCase):
 	def test_update_product(self,product=new_product['id']):
 		"""Test UPDATE product 146 http://localhost:5000/products/146 - with method PUT"""
 		response = requests.put(self.base_url(f'/products/{product}'), data=self.update_product)
-		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.status_code, 204)
 		self.assertDictContainsSubset(self.update_product,response.json())
 
 	def test_delete_product(self,product=new_product['id']):

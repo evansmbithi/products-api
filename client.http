@@ -1,0 +1,5 @@
+# Test API on VS Code
+# Install Rest CLient extension
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+GET http://localhost:5000/products
